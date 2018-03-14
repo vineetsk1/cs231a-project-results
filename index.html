@@ -1,1 +1,585 @@
-<h1>Hello World!</h1>
+<html>
+<head>
+
+<title>Trajnet: CS231A Results</title>
+
+<style>
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+body, html { font-size: 100%; padding: 0; margin: 0;}
+
+body {
+    font-family: 'Lato', Calibri, Arial, sans-serif;
+}
+
+.column {
+	position: fixed;
+	width: 20%;
+	height: 100%;
+	background-color: #01161E;
+	display: table;
+}
+
+.container {
+	width: 80%;
+	position: absolute;
+	background-color: white;
+	left: 20%;
+	padding-bottom: 50px;
+}
+
+.sidebar {
+	background-color: #01161E;
+}
+
+.sidebar .title, .sidebar .subtitle {
+	color: #AAAAAA;
+	width: 100%;
+	margin-top: 50px;
+	margin-left: 25px;
+}
+
+.sidebar .title {
+	font-weight: 300;
+	font-size: 40px;
+}
+
+.sidebar .subtitle {
+	font-weight: 200;
+	font-size: 15px;
+	font-style: italic;
+	color: #888888;
+	margin-top: 20px;
+}
+
+.sidebar .links {
+	margin-top: 50px;
+	margin-left: 25px;
+}
+
+a {
+	text-decoration: none;
+}
+
+.sidebar .link {
+	color: #AAAAAA;
+	width: 100%;
+	font-weight: 200;
+	font-size: 15px;
+	text-decoration: none;
+	height: 100%;
+	margin-top: 20px;
+	background-color: rgba(1, 60, 100, 1.0);
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-left: -10px;
+	padding-left: 10px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.sidebar .link:hover {
+	background-color: rgba(1, 60, 100, 0.7);
+}
+
+.sidebar a .link:hover {
+	/*color: #3388FF;*/
+}
+
+.container div {
+	margin-left: 50px;
+}
+
+.container .title {
+	margin-top: 50px;
+	font-size: 40px;
+	font-weight: 200;
+}
+
+.container .spacing {
+	height: 70px;
+	width: 100%;
+}
+
+.container .subtitle {
+	margin-left: 0px;
+	margin-top: 30px;
+	font-size: 25px;
+	font-weight: 200;
+}
+
+.select {
+  margin-top: 20px;
+  position: absolute;
+  height: 47.5px;
+  background: white;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.05);
+}
+.select:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  right: 10px;
+  bottom: 0;
+  margin: auto;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: #a52c2c transparent transparent transparent;
+  pointer-events: none;
+}
+.select:before {
+  width: 30px;
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: whitesmoke;
+  content: '';
+  pointer-events: none;
+}
+.select:hover:before {
+  background: #ffcfcf;
+}
+.select select {
+  font-size: 14px;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  padding-right: 35px;
+  padding-left: 15px;
+  /*border: none;*/
+  /*border: 1px solid #a52c2c;*/
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+.select select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+.select select::-ms-expand {
+  display: none;
+}
+.select select:focus {
+  border-color: #63ffb4;
+}
+
+.container .imgresult {
+	margin-top: 10px;
+	max-width: 300px;
+	margin-left: 0px;
+	float: left;
+}
+
+.imgresult img {
+	max-width: 300px;
+	margin-top: 10px;
+}
+
+.container .imgresult2 {
+	margin-top: 10px;
+	max-width: 500px;
+	margin-left: 0px;
+	float: left;
+}
+
+.imgresult2 img {
+	max-width: 500px;
+	margin-top: 10px;
+}
+
+.imgresult .subtitle {
+	text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    width: 500px;
+    font-size: 14px;
+}
+
+td, th {
+    border: 1px solid #aaaaaa;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="column sidebar">
+	<div class="title">Trajnet</div>
+	<div class="subtitle">Towards a Benchmark for Human Trajectory Prediction</div>
+	<div class="links">
+		<a href="#" onclick="activateContainer(1);"><div class="link">Dataset Metrics</div></a>
+		<a href="#" onclick="activateContainer(2);"><div class="link">Dataset Animations</div></a>
+		<a href="#" onclick="activateContainer(3);"><div class="link">Leaderboard &amp; Results</div></a>
+		<a href="#" onclick="activateContainer(4);"><div class="link">Prediction Visualization</div></a>
+		<a href="http://trajnet.stanford.edu/workshops/2018/" target="_blank"><div class="link">CVPR Workshop</div></a>
+		<a href="http://trajnet.stanford.edu" target="_blank"><div class="link">TrajNet Website</div></a>
+	</div>
+</div>
+
+<div class="container" id="container1">
+	<div id="title" class="title">Dataset Metrics</div>
+
+	<div class="select">
+		<select id="options">
+		</select>
+	</div>
+	<div class="spacing"></div>
+
+	<div id="results">
+	</div>
+
+</div>
+
+<div class="container" id="container2">
+	<div id="title2" class="title">Dataset Animations</div>
+
+	<div class="select">
+		<select id="options2">
+		</select>
+	</div>
+	<div class="spacing"></div>
+
+	<div id="results2">
+	</div>
+
+</div>
+
+<div class="container" id="container3">
+	<div class="title">Leaderboard &amp; Results</div>
+
+	<div id="tables">
+	</div>
+
+</div>
+
+<div class="container" id="container4">
+	<div class="title">Prediction Visualization</div>
+</div>
+
+<script>
+
+var EXTENSION = ".png";
+var EXTENSION2 = ".gif";
+var ROOT = "out/";
+var ANIM_FOLDER = "image_frame/";
+var FOLDERS = ["positions", "density_1", "density_2", "pedestrian_speed", "speed_histogram", "speed_image_space"];
+var NCONTAINERS = 4;
+var NHEADERS = 5;
+
+var datasets = {
+	"bookstore_":"[0:3]",
+	"coupa_":"[0:3]-2",
+	"crowds_zara0":"[1:3]",
+	"deathCircle_":"[0:4]",
+	"gates_":"[0:8]",
+	"hyang_":"[0:9]-2",
+	"little_":"[0:3]",
+	"nexus_":"[0:9]",
+	"quad_":"[0:3]",
+	"students00":"[1:3]-2",
+	"uni_examples":""
+}
+
+var datasets2 = ["coupa_0", "coupa_1", "crowds_zara01", "gates_2", "hyang_0", "hyang_1", "hyang_3", "hyang_8", "little_0", "little_1", "little_2", "little_3", "nexus_5", "uni_examples"];
+
+var leaderdescriptions = ["Full Results on Linear Prediction", "Full Results on Interactive Gaussian Processes Prediction", "Direct Comparison (Linear, IGP, Naive-LSTM)"];
+var leaderboards = ["File                     P-L2        F-L2        P-L1        F-L1        \
+Overall                  0.10471     2.54556     0.13035     3.17081     \
+biwi/                    0.14942     3.69936     0.19225     4.77071     \
+    biwi_eth.txt         0.14942     3.69936     0.19225     4.77071     \
+crowds/                  0.09415     2.22489     0.11815     2.79071     \
+    uni_examples.txt     0.10437     2.48963     0.13079     3.12805     \
+    crowds_zara01.txt    0.08394     1.96015     0.10551     2.45337     \
+stanford/                0.10332     2.51542     0.12814     3.12142     \
+    little_2.txt         0.07815     1.82728     0.09641     2.25107     \
+    quad_2.txt           0.03981     0.9167      0.05186     1.18161     \
+    little_3.txt         0.10962     2.52188     0.13591     3.12674     \
+    quad_0.txt           0.03082     0.66495     0.04146     0.91412     \
+    gates_2.txt          0.09307     2.17634     0.11326     2.65414     \
+    hyang_0.txt          0.10862     2.53872     0.13368     3.13028     \
+    hyang_1.txt          0.10818     2.44811     0.13026     2.96144     \
+    quad_3.txt           0.24537     7.3563      0.30588     9.07888     \
+    coupa_1.txt          0.05422     1.27022     0.06666     1.57024     \
+    nexus_5.txt          0.17768     4.46534     0.21189     5.4718      \
+    coupa_0.txt          0.06035     1.423       0.07428     1.74739     \
+    little_0.txt         0.14814     3.45942     0.1852      4.34553     \
+    quad_1.txt           0.09073     2.1099      0.11956     2.72348     \
+    little_1.txt         0.09732     2.32751     0.12012     2.86777     \
+    hyang_3.txt          0.12198     2.87729     0.15514     3.65238     \
+    nexus_6.txt          0.09268     2.10337     0.1151      2.61361     \
+    hyang_8.txt          0.09971     2.27582     0.1217      2.77357  ",
+
+"File                     P-L2        F-L2        P-L1        F-L1        \
+Overall                  0.30332     0.94976     0.38248     1.21242     \
+biwi/                    0.35179     1.03451     0.44041     1.28601     \
+    biwi_eth.txt         0.35179     1.03451     0.44041     1.28601     \
+crowds/                  0.37433     1.0488      0.47036     1.33884     \
+    uni_examples.txt     0.38687     1.0474      0.48743     1.33723     \
+    crowds_zara01.txt    0.36179     1.0502      0.45329     1.34045     \
+stanford/                0.29211     0.93313     0.36873     1.19322     \
+    little_2.txt         0.15157     0.34544     0.18958     0.43955     \
+    quad_2.txt           0.03412     0.1384      0.04375     0.17844     \
+    little_3.txt         0.32157     1.0419      0.4054      1.33666     \
+    quad_0.txt           0.39992     1.31716     0.49549     1.73304     \
+    gates_2.txt          0.29062     0.87646     0.36622     1.11034     \
+    hyang_0.txt          0.31007     1.13958     0.39096     1.45531     \
+    hyang_1.txt          0.27518     0.97605     0.34697     1.23469     \
+    quad_3.txt           0.35849     1.26938     0.45106     1.58438     \
+    coupa_1.txt          0.32851     1.09293     0.41349     1.41168     \
+    nexus_5.txt          0.41487     0.93615     0.54299     1.20911     \
+    coupa_0.txt          0.32815     1.12426     0.41193     1.42921     \
+    little_0.txt         0.31518     1.18896     0.40746     1.50039     \
+    quad_1.txt           0.30572     1.00004     0.38734     1.26718     \
+    little_1.txt         0.22821     0.62453     0.2807      0.78253     \
+    hyang_3.txt          0.30382     0.85942     0.37565     1.11606     \
+    nexus_6.txt          0.34868     1.17487     0.43805     1.51057     \
+    hyang_8.txt          0.25121     0.75767     0.32138     0.98561",
+
+    "Dataset/Method P-L2 F-L2 P-L1 F-L1 \
+     :biwi_eth_Linear 0.14942465279925574 3.699362871002873 0.19225299564270154 4.770705882352942 \
+     :biwi_eth_IGP    0.35178684913265296 1.0345089415493325 0.4404061346667261 1.286009006266035 \
+     :biwi_eth_Naive-LSTM 0.14454823060498523 2.3259094502944118 0.17912050208252897 2.861921514241288 \
+     :uni_examples_Linear 0.1043691936504441 2.489627209563473 0.1307897385620915 3.128051764705882 \
+     :uni_examples_IGP 0.38687197310227706 1.0473981777353412 0.48742823259377316 1.3372321265264748 \
+     :uni_examples_Naive-LSTM 0.11877073964777989 2.240951379658609 0.15192601505065445 2.8247327586351645 \
+     :crowds_zara01_Linear 0.08393601624002141 1.960154062652785 0.10551047358834242 2.4533748633879786 \
+     :crowds_zara01_IGP 0.3617949309098963 1.0502001312169378 0.4532904576581764 1.340447385524324 \
+     :crowds_zara01_Naive-LSTM 0.24457057444115687 3.1603914310063637 0.3031115244066813 3.9433853925864066"
+   ];
+
+var titleelem = document.getElementById("title");
+var titleelem2 = document.getElementById("title2");
+var select = document.getElementById("options");
+var select2 = document.getElementById("options2");
+var results = document.getElementById("results");
+var tables = document.getElementById("tables");
+var currentActive = -1;
+var containers = []
+
+function setupContainers() {
+	for(var i = 1; i <= NCONTAINERS; i++) {
+		containers.push(document.getElementById("container" + i));
+	}
+	hideContainers();
+}
+
+function hideContainers() {
+	for(var i = 0; i < containers.length; i++) {
+		containers[i].style.display = "none";
+	}
+}
+
+function activateContainer(newActive) {
+	currentActive = newActive;
+	hideContainers();
+	containers[currentActive - 1].style.display = "block";
+}
+
+
+function cleanName(name) {
+	name = name.split("_");
+	for (var i = 0; i < name.length; i++) {
+		name[i] = name[i].substring(0, 1).toUpperCase() 
+					+ name[i].substring(1).toLowerCase();
+	}
+	name = name.join(" ");
+	return name;
+}
+
+function cleanName2(name) {
+	name = name.split("_");
+	for (var i = 0; i < name.length; i++) {
+		name[i] = name[i].substring(0, 1).toUpperCase() 
+					+ name[i].substring(1);
+	}
+	name = name.join(" ");
+	return name;
+}
+
+function processDatasets() {
+	var ds = {}
+
+	for (var key in datasets) {
+		if (!datasets.hasOwnProperty(key)) continue;
+
+		if (datasets[key] === "") {
+			ds[cleanName(key)] = key + EXTENSION;
+		} else {
+			// Indeces
+			var startBracket = datasets[key].indexOf("[");
+			var middleToken = datasets[key].indexOf(":");
+			var endBracket = datasets[key].indexOf("]");
+			var skipToken = datasets[key].indexOf("-");
+
+			var start = parseInt(datasets[key].substring(startBracket+1, middleToken));
+			var end = parseInt(datasets[key].substring(middleToken+1, endBracket));
+
+			if (skipToken != -1) {
+				skipToken = parseInt(datasets[key].substring(skipToken+1));
+			}
+
+			for (var i = start; i <= end; i++) {
+				if (i == skipToken) continue;
+				var newkey = key + i;
+				ds[cleanName(newkey)] = newkey + EXTENSION;
+			}
+		}
+
+	}
+
+	datasets = ds;
+}
+
+function createSelection() {
+	var selected = true;
+	for(var key in datasets) {
+		if (!datasets.hasOwnProperty(key)) continue;
+		var newElem = "<option ";
+		if(selected) newElem += " selected ";
+		newElem += "value='" + datasets[key] + "'>" + key + "</option>";
+
+		select.innerHTML += newElem
+		selected = false;
+	}
+}
+
+function createSelection2() {
+	var selected = true;
+	for(var i = 0; i < datasets2.length; i++) {
+		var key = datasets2[i];
+		var newElem = "<option ";
+		if(selected) newElem += " selected ";
+		newElem += "value='" + key + "'>" + cleanName(key) + "</option>";
+
+		select2.innerHTML += newElem
+		selected = false;
+	}
+}
+
+function showResults() {
+	var filename = select.options[select.selectedIndex].text;
+	titleelem.innerHTML = "Dataset Metrics: " + filename; 
+
+	results.innerHTML = "";
+	for (var i = 0; i < FOLDERS.length; i++) {
+		var filename = select.options[select.selectedIndex].value;
+		var newelem = "<div class='imgresult'><div class='subtitle'>" + cleanName(FOLDERS[i]) + "</div>" + "<img src='" + ROOT + FOLDERS[i] + "/" + filename + "'/></div>";
+		results.innerHTML += newelem;
+	}
+}
+
+function showResults2() {
+	var filename = select2.options[select2.selectedIndex].text;
+	titleelem2.innerHTML = "Dataset Animations: " + filename; 
+
+	filename = select2.options[select2.selectedIndex].value;
+	results2.innerHTML += "<div class='imgresult2'><div class='subtitle'>Trajectories over Time</div><img src='" + ROOT + ANIM_FOLDER + filename + EXTENSION2 + "'/></div>";
+
+}
+
+function splitLeaderboards() {
+	for(var i = 0; i < leaderboards.length; i++) {
+		leaderboards[i] = leaderboards[i].split(/[ ,]+/);
+	}
+}
+
+function createTables() {
+	tables.innerHTML = "";
+	for(var i = 0; i < leaderboards.length; i++) {
+		tables.innerHTML += "<div class='subtitle'>" + leaderdescriptions[i] + "</div>";
+		var table = "<table>";
+		for(var j = 0; j < leaderboards[i].length; j+= NHEADERS) {
+			if (leaderboards[i][j] == "" || leaderboards[i][j] == undefined) break;
+			table += "<tr>";
+			for(var k = j; k < j + NHEADERS; k++) {
+				if (leaderboards[i][k] == "" || leaderboards[i][k] == undefined) break;
+				if (leaderboards[i][k].indexOf(":") == 0) {
+					leaderboards[i][k] = cleanName2(leaderboards[i][k].substring(1));
+				}
+				var startTag = "td";
+				if(j == 0) startTag = "th";
+				table += "<" + startTag + ">" + leaderboards[i][k] + "</" + startTag + ">";
+			}
+			table += "</tr>";
+		}
+		table += "</table>";
+		tables.innerHTML += table;
+	}
+}
+
+// <table>
+//   <tr>
+//     <th>Company</th>
+//     <th>Contact</th>
+//     <th>Country</th>
+//   </tr>
+//   <tr>
+//     <td>Alfreds Futterkiste</td>
+//     <td>Maria Anders</td>
+//     <td>Germany</td>
+//   </tr>
+//   <tr>
+//     <td>Centro comercial Moctezuma</td>
+//     <td>Francisco Chang</td>
+//     <td>Mexico</td>
+//   </tr>
+//   <tr>
+//     <td>Ernst Handel</td>
+//     <td>Roland Mendel</td>
+//     <td>Austria</td>
+//   </tr>
+//   <tr>
+//     <td>Island Trading</td>
+//     <td>Helen Bennett</td>
+//     <td>UK</td>
+//   </tr>
+//   <tr>
+//     <td>Laughing Bacchus Winecellars</td>
+//     <td>Yoshi Tannamuri</td>
+//     <td>Canada</td>
+//   </tr>
+//   <tr>
+//     <td>Magazzini Alimentari Riuniti</td>
+//     <td>Giovanni Rovelli</td>
+//     <td>Italy</td>
+//   </tr>
+// </table>
+
+select.onchange = function() {
+	showResults();
+}
+
+select2.onchange = function() {
+	showResults2();
+}
+
+processDatasets();
+createSelection();
+createSelection2();
+showResults();
+showResults2();
+setupContainers();
+activateContainer(1);
+splitLeaderboards();
+createTables();
+
+</script>
+
+</body>
+</html>
