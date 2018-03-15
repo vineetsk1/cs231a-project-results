@@ -176,9 +176,21 @@ a {
 	float: left;
 }
 
+.container .graphresult {
+	margin-top: 10px;
+	max-width: 200px;
+	float: left;
+}
+
 .imgresult img {
 	max-width: 300px;
 	margin-top: 10px;
+}
+
+.graphresult canvas {
+	border: 1px solid rgb(100, 100, 100);
+	max-width: 200px;
+	margin-top: 20px;
 }
 
 .container .imgresult2 {
@@ -193,7 +205,7 @@ a {
 	margin-top: 10px;
 }
 
-.imgresult .subtitle {
+.imgresult .subtitle, .graphresult .subtitle {
 	text-align: center;
 }
 
@@ -269,7 +281,23 @@ tr:nth-child(even) {
 </div>
 
 <div class="container" id="container4">
-	<div class="title">Prediction Visualization</div>
+	<div class="title">Prediction Visualization - Biwi ETH</div>
+
+	<div class="graphresult">
+		<div class="subtitle">Linear</div>
+		<canvas id="canvas1" width="200px" height="200px"></canvas>
+	</div>
+
+	<div class="graphresult">
+		<div class="subtitle">Interaction GP</div>
+		<canvas id="canvas2" width="200px" height="200px"></canvas>
+	</div>
+
+	<div class="graphresult">
+		<div class="subtitle">Naive-LSTM</div>
+		<canvas id="canvas3" width="200px" height="200px"></canvas>
+	</div>
+
 </div>
 
 <script>
@@ -524,43 +552,212 @@ function createTables() {
 	}
 }
 
-// <table>
-//   <tr>
-//     <th>Company</th>
-//     <th>Contact</th>
-//     <th>Country</th>
-//   </tr>
-//   <tr>
-//     <td>Alfreds Futterkiste</td>
-//     <td>Maria Anders</td>
-//     <td>Germany</td>
-//   </tr>
-//   <tr>
-//     <td>Centro comercial Moctezuma</td>
-//     <td>Francisco Chang</td>
-//     <td>Mexico</td>
-//   </tr>
-//   <tr>
-//     <td>Ernst Handel</td>
-//     <td>Roland Mendel</td>
-//     <td>Austria</td>
-//   </tr>
-//   <tr>
-//     <td>Island Trading</td>
-//     <td>Helen Bennett</td>
-//     <td>UK</td>
-//   </tr>
-//   <tr>
-//     <td>Laughing Bacchus Winecellars</td>
-//     <td>Yoshi Tannamuri</td>
-//     <td>Canada</td>
-//   </tr>
-//   <tr>
-//     <td>Magazzini Alimentari Riuniti</td>
-//     <td>Giovanni Rovelli</td>
-//     <td>Italy</td>
-//   </tr>
-// </table>
+function getText(loc, callback){
+    // read text from URL location
+    var request = new XMLHttpRequest();
+    request.open('GET', loc, true);
+    request.send(null);
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader('Content-Type');
+            if (type.indexOf("text") !== 1 && callback) {
+                callback(request.responseText);
+            }
+        }
+    }
+}
+
+function processText(text) {
+
+	var lineMap = {};
+	var frames = [];
+	text = text.split("\n");
+
+	for(var i = 0; i < text.length; i++) {
+		var line = text[i].split(" ");
+		line[0] = parseInt(parseFloat(line[0]));
+		line[1] = parseFloat(line[1]);
+		line[2] = parseFloat(line[2]);
+		line[3] = parseFloat(line[3]);
+		if (!(line[0] in lineMap)) {
+			frames.push(line[0]);
+			lineMap[line[0]] = [];
+		}
+		lineMap[line[0]].push([line[1], line[2], line[3]]);
+	}
+
+	return {frames:frames, map:lineMap};
+}
+
+function getBounds(frames, map) {
+	var minX = undefined, maxX = undefined, minY = undefined, maxY = undefined;
+	for(var i = 0; i < frames.length; i++) {
+		for(var j = 0; j < map[frames[i]].length; j++) {
+			var x = map[frames[i]][j][1];
+			var y = map[frames[i]][j][2];
+			if (minX == undefined || x < minX) minX = x;
+			if (maxX == undefined || x > maxX) maxX = x;
+			if (minY == undefined || y < minY) minY = y;
+			if (maxY == undefined || y > maxY) maxY = y;
+		}
+	}
+	return [minX, minY, maxX, maxY]
+}
+
+var frames = [];
+var map = {};
+var bounds = undefined;
+var currentFrame = -1;
+var frameIndex = 0;
+
+var textFilesLoaded = 0;
+var ALL_TEXTS = 4;
+
+function saveText() {
+	getText("data/gt/biwi_eth.txt", function(responseText) {
+		textFilesLoaded += 1
+		var data = processText(responseText);
+		frames = data.frames; // todo merge
+		map.gt = data.map;
+		bounds = getBounds(frames, map.gt); // todo merge
+		if (textFilesLoaded == ALL_TEXTS) {
+			doneTexts();
+		}
+	});
+	getText("data/lin/biwi_eth.txt", function(responseText) {
+		textFilesLoaded += 1
+		var data = processText(responseText);
+		frames = data.frames; // todo merge
+		map.lin = data.map;
+		bounds = getBounds(frames, map.lin); // todo merge
+		if (textFilesLoaded == ALL_TEXTS) {
+			doneTexts();
+		}
+	});
+	getText("data/igp/biwi_eth.txt", function(responseText) {
+		textFilesLoaded += 1
+		var data = processText(responseText);
+		frames = data.frames; // todo merge
+		map.igp = data.map;
+		bounds = getBounds(frames, map.igp); // todo merge
+		if (textFilesLoaded == ALL_TEXTS) {
+			doneTexts();
+		}
+	});
+	getText("data/naive/biwi_eth.txt", function(responseText) {
+		textFilesLoaded += 1
+		var data = processText(responseText);
+		frames = data.frames; // todo merge
+		map.naive = data.map;
+		bounds = getBounds(frames, map.naive); // todo merge
+		if (textFilesLoaded == ALL_TEXTS) {
+			doneTexts();
+		}
+	});
+}
+
+function doneTexts() {
+	frameIndex = 0;
+	currentFrame = frames[frameIndex];
+	animateFrame(ctx1, map.gt, map.lin);
+	animateFrame(ctx2, map.gt, map.igp);
+	animateFrame(ctx3, map.gt, map.naive);
+}
+
+var canvas1 = document.getElementById("canvas1");
+var ctx1 = canvas1.getContext("2d");
+
+var canvas2 = document.getElementById("canvas2");
+var ctx2 = canvas2.getContext("2d");
+
+var canvas3 = document.getElementById("canvas3");
+var ctx3 = canvas3.getContext("2d");
+
+
+var CANVAS_WIDTH = canvas1.width;
+var CANVAS_HEIGHT = canvas1.height;
+var POINT_WIDTH = 7;
+var POINT_HEIGHT = POINT_WIDTH;
+var POINT_RADIUS = 3;
+
+// Red to green
+var COLORS = ["f80c12", "ee1100", "ff3311", "ff4422", "ff6644", "ff9933", "feae2d", "ccbb33", "d0c310", "aacc22", "69d025", "22ccaa", "12bdb9", "11aabb", "4444dd", "3311bb", "3b0cbd", "442299"];
+
+function displayFrame(ctx, gt, pred) {
+
+	ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	// displayAxes(ctx);
+
+	for(var i = 0; i < frames.length; i++) {
+		if(frames[i] <= currentFrame) {
+			var color = "000000";
+
+			if (frameIndex+1 < COLORS.length) {
+				var distance = frameIndex - i;
+				color = COLORS[distance];
+			} else {
+				var scale = COLORS.length / (frameIndex+1);
+				var distance = frameIndex - i;
+				distance *= scale;
+				distance = Math.round(distance);
+				color = COLORS[distance];	
+			}
+
+			for(var j = 0; j < gt[frames[i]].length; j++) {
+				plotPoint(ctx, gt[frames[i]][j][1], gt[frames[i]][j][2], "#" + color + "22", "square");
+			}
+
+			for(var j = 0; j < pred[frames[i]].length; j++) {
+				plotPoint(ctx, pred[frames[i]][j][1], pred[frames[i]][j][2], "#" + color + "FF", "circle");
+			}
+
+		}
+	}
+}
+
+function nextFrame(ctx, gt, pred) {
+	frameIndex += 1
+	if (frameIndex >= frames.length) {
+		frameIndex = 0;
+	}
+	currentFrame = frames[frameIndex];
+	displayFrame(ctx, gt, pred);
+}
+
+var animateInterval = -1;
+var TIMESTEP = 100;
+function animateFrame(ctx, gt, pred) {
+	animateInterval = setInterval(function(){nextFrame(ctx, gt, pred);}, TIMESTEP);
+}
+
+function plotPoint(ctx, x, y, color, shape) { // later color and shape
+	x = CANVAS_WIDTH*(x-bounds[0])/(bounds[2] - bounds[0]);
+	y = CANVAS_HEIGHT*(y-bounds[1])/(bounds[3] - bounds[1]);
+	ctx.fillStyle = color;
+	if(shape == "square") {
+		ctx.beginPath();
+		ctx.rect(x - POINT_WIDTH/2, y - POINT_HEIGHT/2, POINT_WIDTH, POINT_HEIGHT);
+		ctx.closePath();
+	} else if(shape == "circle") {
+		ctx.beginPath();
+		ctx.arc(x,y, POINT_RADIUS, 0, 2*Math.PI);
+		ctx.closePath();
+	}
+	ctx.fill();
+}
+
+function displayAxes(ctx) {
+	ctx.beginPath();
+	ctx.moveTo(CANVAS_WIDTH/2, 0);
+	ctx.lineTo(CANVAS_WIDTH/2, CANVAS_HEIGHT);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(0, CANVAS_HEIGHT/2);
+	ctx.lineTo(CANVAS_WIDTH, CANVAS_HEIGHT/2);
+	ctx.closePath();
+	ctx.stroke();
+}
 
 select.onchange = function() {
 	showResults();
@@ -579,6 +776,7 @@ setupContainers();
 activateContainer(1);
 splitLeaderboards();
 createTables();
+saveText();
 
 </script>
 
